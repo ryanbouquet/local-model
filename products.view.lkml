@@ -12,6 +12,16 @@ view: products {
     sql: ${TABLE}.brand ;;
   }
 
+  dimension: brand_starts_with_A {
+    case: {
+      when: {
+        sql: LEFT(${products.brand}, 1) = 'A' ;;
+        label: "A"
+      }
+      else: "NOT A"
+    }
+  }
+
   dimension: category {
     type: string
     sql: ${TABLE}.category ;;
@@ -32,6 +42,12 @@ view: products {
     sql: ${TABLE}.rank ;;
   }
 
+  dimension: rank_tiers {
+    type:  tier
+    tiers: [0, 100, 10000, 1000000, 2000000]
+    style: integer
+    sql: ${TABLE}.rank ;;
+  }
   dimension: retail_price {
     type: number
     sql: ${TABLE}.retail_price ;;
