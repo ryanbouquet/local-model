@@ -7,6 +7,16 @@ view: products {
     sql: ${TABLE}.id ;;
   }
 
+  dimension: zip_hopefully {
+    type:  zipcode
+    sql: ${products.id} + 10000 ;;
+  }
+
+  dimension: bool_starts_with_A {
+    type:  yesno
+    sql:  UPPER(${brand_starts_with_A}) = 'A';;
+  }
+
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
@@ -61,5 +71,22 @@ view: products {
   measure: count {
     type: count
     drill_fields: [id, item_name, inventory_items.count]
+  }
+
+  measure: average_rank {
+    type: average
+    sql: ${rank} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: retail_sum_greater_than_100 {
+    type:  sum
+    sql: ${retail_price} ;;
+    filters: {
+      field: retail_price
+      value: ">100"
+    }
+    value_format_name: decimal_0
+    description: "sum of all retail prices greater than 100"
   }
 }
