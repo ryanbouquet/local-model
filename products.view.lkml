@@ -89,4 +89,10 @@ view: products {
     value_format_name: decimal_0
     description: "sum of all retail prices greater than 100"
   }
+
+  measure: median_price {
+    type:  median
+    sql: ${retail_price} ;;
+    value_format_name: decimal_0
+  }
 }
