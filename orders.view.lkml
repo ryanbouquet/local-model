@@ -36,4 +36,10 @@ view: orders {
     type: count
     drill_fields: [id, users.first_name, users.last_name, users.id, order_items.count]
   }
+
+  measure: check_id_match {
+    type:  number
+    sql: ${users.id} - ${orders.user_id} ;;
+    description: "should be 0 everytime"
+  }
 }
