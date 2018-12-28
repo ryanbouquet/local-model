@@ -57,10 +57,20 @@ explore: orders {
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
+    #fields: [id, age, city, country, first_name, gender, last_name, state, zip]
   }
 }
 
-explore: products {}
+explore: products {
+  sql_always_where: ${products.retail_price} is not null;;
+  always_filter: {
+    filters:  {
+      field: products.retail_price
+      value: ">0"
+    }
+  }
+  fields: [ALL_FIELDS*, -products.zip_hopefully]
+}
 
 explore: schema_migrations {}
 
@@ -74,4 +84,6 @@ explore: user_data {
 
 explore: users {}
 
-explore: users_nn {}
+explore: users_nn {
+  view_label: "users (simplified)"
+}
