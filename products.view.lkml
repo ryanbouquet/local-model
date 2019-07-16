@@ -20,6 +20,7 @@ view: products {
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
+    html: <b>{{value}}</b> ;;
   }
 
   dimension: brand_starts_with_A {
@@ -77,6 +78,7 @@ view: products {
     type: average
     sql: ${rank} ;;
     value_format_name: decimal_0
+    html: <uo><li>{{rendered_value}}</li></uo> ;;
   }
 
   measure: retail_sum_greater_than_100 {

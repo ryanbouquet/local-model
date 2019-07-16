@@ -16,11 +16,19 @@ view: orders {
       week,
       month,
       quarter,
-      year
+      year,
+      day_of_week,
+      day_of_week_index
     ]
+    drill_fields: [count]
     sql: ${TABLE}.created_at ;;
   }
 
+  dimension: created_date_test {
+    type: date
+    drill_fields: [created_date, check_id_match]
+    sql: ${created_date} ;;
+  }
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;

@@ -10,13 +10,9 @@ datagroup: local_model_default_datagroup {
 
 persist_with: local_model_default_datagroup
 
-explore: events {
-  join: users {
-    type: left_outer
-    sql_on: ${events.user_id} = ${users.id} ;;
-    relationship: many_to_one
-  }
-}
+
+
+explore: derived_test {}
 
 explore: inventory_items {
   join: products {
@@ -24,6 +20,7 @@ explore: inventory_items {
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
     relationship: many_to_one
   }
+
 }
 
 explore: order_items {
@@ -59,6 +56,15 @@ explore: orders {
     relationship: many_to_one
     #fields: [id, age, city, country, first_name, gender, last_name, state, zip]
   }
+  join: derived_test {
+    type:  left_outer
+    sql_on:  ${orders.id} = ${derived_test.orders_id} ;;
+    relationship:  one_to_one
+  }
+  join: subtotal_over {
+    type: cross
+    relationship: one_to_many
+  }
 }
 
 explore: products {
@@ -82,7 +88,19 @@ explore: user_data {
   }
 }
 
-explore: users {}
+explore: users {
+  view_name: users
+}
+
+explore: users_extend {
+  extends: [users]
+  view_name: users_extend
+
+  join: users {
+    sql_on: ${users.id} = ${users_extend.id};;
+    relationship: one_to_one
+  }
+}
 
 explore: users_nn {
   view_label: "users (simplified)"

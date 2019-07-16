@@ -5,8 +5,23 @@ view: order_items {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+    description: "really long description for testing purposes to see if it gets cut off ok cool"
+    html: <div style="background-color:black;color: blue">
+{{rendered_value}}
+</div> ;;
   }
 
+  dimension: 20_more {
+    type: number
+    sql: ${TABLE}.id ;;
+  }
+  dimension: test {
+    sql: "test" ;;
+    link: {
+      label: "link"
+      url: "google.com"
+    }
+  }
   dimension: inventory_item_id {
     type: number
     # hidden: yes
@@ -38,6 +53,12 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
+  dimension: tier {
+    type: tier
+    sql: ${sale_price} ;;
+    tiers: [1]
+    style: integer
+  }
   measure: count {
     type: count
     drill_fields: [id, inventory_items.id, orders.id]
