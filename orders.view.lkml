@@ -5,8 +5,18 @@ view: orders {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+    html: {{ value }} {{ user_id._value }} ;;
   }
 
+  dimension: test_in {
+    type:  yesno
+    sql: ${user_id} IN (1,2,3) ;;
+  }
+  dimension: test_format {
+    type: number
+    sql: "2722";;
+    value_format: "[>=1000000]0.00,,\"M\";[>=10000]0.00,,\"K\";#,##0"
+  }
   dimension_group: created {
     type: time
     timeframes: [
@@ -31,7 +41,24 @@ view: orders {
   }
   dimension: status {
     type: string
-    sql: ${TABLE}.status ;;
+    case: {
+      when: {
+        label: "cancelled"
+        sql: ${TABLE}.status = "cancelled";;
+      }
+      when: {
+        label: "complete"
+        sql: ${TABLE}.status = "complete";;
+      }
+      when: {
+        label: "pending"
+        sql: ${TABLE}.status = "pending";;
+      }
+      when: {
+        label: "total"
+        sql: 1=1;;
+      }
+    }
   }
 
   dimension: user_id {

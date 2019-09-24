@@ -67,6 +67,23 @@ explore: orders {
   }
 }
 
+explore: test {
+  view_name:"orders"
+  join: order_items {
+    view_label: "Orders"
+    type: left_outer
+    sql_on: ${order_items.order_id} = ${orders.id} ;;
+    relationship: one_to_many
+    fields: [order_items.ret_times*]
+  }
+  join: users {
+    type: left_outer
+    sql_on: ${orders.user_id} = ${users.id} ;;
+    relationship: many_to_one
+    #fields: [id, age, city, country, first_name, gender, last_name, state, zip]
+  }
+}
+
 explore: products {
   sql_always_where: ${products.retail_price} is not null;;
   always_filter: {
