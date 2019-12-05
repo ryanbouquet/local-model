@@ -6,6 +6,50 @@ view: order_items {
     allowed_value: {value: "2"}
   }
 
+  parameter: date_filter {
+    type: date_time
+    allowed_value: {
+      label: "Yesterday"
+      value: "Yesterday"
+    }
+    allowed_value: {
+      label: "Week to date"
+      value: "This week"
+    }
+    allowed_value: {
+      label: "Last week"
+      value: "Last Week"
+    }
+    allowed_value: {
+      label: "Month to date"
+      value: "This Month"
+    }
+    allowed_value: {
+      label: "Last month"
+      value: "Last Month"
+    }
+    allowed_value: {
+      label: "Quarter to date"
+      value: "This Quarter"
+    }
+    allowed_value: {
+      label: "Last quarter"
+      value: "Last Quarter"
+    }
+    allowed_value: {
+      label: "Year to date"
+      value: "This Year"
+    }
+    allowed_value: {
+      label: "Full year LY"
+      value: "Last Year"
+    }
+  }
+  dimension: seconds {
+    type: number
+    sql: '90' ;;
+    value_format: "mm:ss"
+  }
   dimension: test_liquid {
     type: number
     sql: {% if testing._parmaeter_value == '1' %} orders.id {% else %} products.id {% endif %} ;;
@@ -15,6 +59,7 @@ view: order_items {
     type: number
     sql: ${TABLE}.id ;;
     description: "really long description for testing purposes to see if it gets cut off ok cool"
+    value_format: "mm:ss"
     #html: <div style="background-color:black;color: blue">
 #{{rendered_value}}
 #</div> ;;
@@ -100,8 +145,27 @@ view: order_items {
     tiers: [1]
     style: integer
   }
+
+  dimension: case_test {
+    case: {
+      when: {
+        sql: ${id} = 1 ;;
+        label: "Null"
+      }
+      else: "fine"
+    }
+  }
   measure: count {
+    label: "123"
     type: count
     drill_fields: [id, inventory_items.id, orders.id]
+  }
+  measure: median_filter {
+    type: median
+    sql: ${id} ;;
+    filters: {
+      field: id
+      value: "NOT NULL"
+    }
   }
 }
